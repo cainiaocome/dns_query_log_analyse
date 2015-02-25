@@ -15,7 +15,7 @@ try:
     cursor.execute(select_sql)
     records = cursor.fetchall()
     for record in records:
-        print record[0]
+        print(record[0])
 except sqlite3.OperationalError as e:
     print(e)
 
