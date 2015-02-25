@@ -31,10 +31,7 @@ cat query.log | awk '{print $5}' | cut -d '#' -f 1 | sort | uniq | grep -v '198.
 #    ./readintodb.py $date $second $ip
 #done
 
-rm ./query.db
-./creatdatabase.py
-./readintodb.py
-./readfromdb.py >ip.maybebad
+rm ./query.db && ./create_database.py && ./readintodb.py && ./readfromdb.py >ip.maybebad
 cat ip | while read ip; do
     count=`cat ip.maybebad | grep ip | wc -l`
     if [ $count -gt 8 ]; then
