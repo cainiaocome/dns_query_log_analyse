@@ -35,7 +35,7 @@ cat $PWD/query.log | awk '{print $5}' | cut -d '#' -f 1 | sort | uniq | grep -v 
 
 rm -f $PWD/query.db && $PWD/create_database.py && $PWD/readintodb.py && $PWD/readfromdb.py >$PWD/ip.maybebad
 cat $PWD/ip | while read ip; do
-    count=`cat $PWD/ip.maybebad | grep ip | wc -l`
+    count=`cat $PWD/ip.maybebad | grep $ip | wc -l`
     if [ $count -gt 8 ]; then
         echo $ip >>$PWD/ip.trulybad
     fi
