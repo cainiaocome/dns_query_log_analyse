@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 cat query.log | awk '{print $5}' | cut -d '#' -f 1 | sort | uniq | grep -v '198.211.0.204'>ip
-cat query.log | awk '{print $2}' | cut -d '.' -f 1 | sort | uniq >seconds
+#cat query.log | awk '{print $2}' | cut -d '.' -f 1 | sort | uniq >seconds
 
 #cat ip | while read ip; do
 #    echo "start analyse $ip"
@@ -22,10 +22,22 @@ cat query.log | awk '{print $2}' | cut -d '.' -f 1 | sort | uniq >seconds
 #        fi
 #    fi
 #done
-cat query.log | while read line; do
-    date=`echo $line | awk '{print $1}'`
-    second=`echo $line | awk '{print $2}' | cut -d '.' -f 1`
-    ip=`echo $line | awk '{print $5}' | cut -d '#' -f 1`
-    echo "$date, $second, $ip"
-    ./readintodb.py $date $second $ip
+
+#cat query.log | while read line; do
+#    date=`echo $line | awk '{print $1}'`
+#    second=`echo $line | awk '{print $2}' | cut -d '.' -f 1`
+#    ip=`echo $line | awk '{print $5}' | cut -d '#' -f 1`
+#    echo "$date, $second, $ip"
+#    ./readintodb.py $date $second $ip
+#done
+
+rm ./query.db
+./creatdatabase.py
+./readintodb.py
+./readfromdb.py >ip.maybebad
+cat ip | while read ip; do
+    count=`cat ip.maybebad | grep ip | wc -l`
+    if [ $count -gt 8 ]; then
+        echo $ip >>ip.trulybad
+    fi
 done
