@@ -11,9 +11,10 @@ select_sql = 'select * from query where date="{}" and second="{}" and ip="{}"'
 insert_sql = 'insert into query values ("{}","{}","{}",{})'
 update_sql = 'update query set count = {} where date="{}" and second="{}" and ip="{}"'
 
+connection = sqlite3.connect(db_name)
+cursor = connection.cursor()
+
 def process_record(date, second, ip):
-    connection = sqlite3.connect(db_name)
-    cursor = connection.cursor()
 
     try:
         cursor.execute(select_sql.format(date, second, ip))
@@ -28,9 +29,6 @@ def process_record(date, second, ip):
     except sqlite3.OperationalError as e:
         print(e)
 
-    connection.commit()
-    connection.close()
-
 def parse_line(line):
     line_splited = line.split(' ')
     date = line_splited[0]
@@ -44,5 +42,6 @@ while True:
         break
     date, second, ip = parse_line(line)
     process_record(date, second, ip)    
-sys.exit(0)
 
+connection.commit()
+connection.close()
